@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>693</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>VisComp</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label_1">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>351</width>
+      <height>291</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QSlider" name="verticalSlider">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>500</y>
+      <width>401</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>255</number>
+    </property>
+    <property name="value">
+     <number>127</number>
+    </property>
+    <property name="tracking">
+     <bool>true</bool>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <property name="invertedAppearance">
+     <bool>false</bool>
+    </property>
+    <property name="invertedControls">
+     <bool>false</bool>
+    </property>
+    <property name="tickPosition">
+     <enum>QSlider::NoTicks</enum>
+    </property>
+    <property name="tickInterval">
+     <number>1</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_abrirIm1">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>60</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Abrir</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_Usar_Resultado">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>560</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Usar Resultado</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>40</y>
+      <width>541</width>
+      <height>431</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>360</y>
+      <width>351</width>
+      <height>291</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>20</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Imagem 1</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>340</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Imagem 2</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>20</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Resultado</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_abrirIm2">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>380</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Abrir</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_limiar">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>480</y>
+      <width>31</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_switch">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>560</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>img 1 &lt;=&gt; img 2</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>480</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Limiar:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_abrirIm1_2">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>100</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Salvar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_abrirIm1_3">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>420</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Salvar</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1000</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuIn_cio">
+    <property name="title">
+     <string>Início</string>
+    </property>
+    <addaction name="actionAbrir_Imagem_1"/>
+    <addaction name="actionAbrir_Imagem_2"/>
+    <addaction name="actionSalvar_Resultado"/>
+    <addaction name="actionOp_es"/>
+    <addaction name="actionSair"/>
+   </widget>
+   <widget class="QMenu" name="menuConverter">
+    <property name="title">
+     <string>Converter</string>
+    </property>
+    <addaction name="actionTons_de_Cinza"/>
+    <addaction name="actionBin_rio"/>
+    <addaction name="actionR"/>
+    <addaction name="actionG"/>
+    <addaction name="actionB"/>
+   </widget>
+   <widget class="QMenu" name="menuOp_Aritim_ticas">
+    <property name="title">
+     <string>Operações</string>
+    </property>
+    <addaction name="actionOpera_o_por_escalar"/>
+    <addaction name="actionSoma"/>
+    <addaction name="actionSubtra_o"/>
+    <addaction name="actionMult"/>
+    <addaction name="actionDivisao"/>
+    <addaction name="separator"/>
+    <addaction name="actionAnd"/>
+    <addaction name="actionOr"/>
+    <addaction name="actionNot"/>
+    <addaction name="actionXor"/>
+   </widget>
+   <widget class="QMenu" name="menuTransforma_o">
+    <property name="title">
+     <string>Transformação</string>
+    </property>
+    <addaction name="actionEscalonamento"/>
+    <addaction name="actionTransla_o"/>
+    <addaction name="actionRota_o"/>
+   </widget>
+   <widget class="QMenu" name="menuDetec_Borda">
+    <property name="title">
+     <string>Detec. Borda</string>
+    </property>
+    <widget class="QMenu" name="menuDerivativo">
+     <property name="title">
+      <string>Derivativo</string>
+     </property>
+     <addaction name="actionPrimeira_Ordem_2"/>
+     <addaction name="actionSegunda_Ordem_2"/>
+    </widget>
+    <widget class="QMenu" name="menuLaplaciano">
+     <property name="title">
+      <string>Laplaciano</string>
+     </property>
+     <addaction name="action3x3"/>
+     <addaction name="action5x5"/>
+     <addaction name="action9x9"/>
+    </widget>
+    <addaction name="menuDerivativo"/>
+    <addaction name="actionSobel"/>
+    <addaction name="actionKirsch"/>
+    <addaction name="actionCanny"/>
+    <addaction name="menuLaplaciano"/>
+   </widget>
+   <widget class="QMenu" name="menuFiltos">
+    <property name="title">
+     <string>Filtros</string>
+    </property>
+    <addaction name="actionGaussiano"/>
+    <addaction name="actionM_dia"/>
+    <addaction name="actionMediana"/>
+    <addaction name="actionLaplaciano"/>
+    <addaction name="actionPassa_Alta"/>
+   </widget>
+   <widget class="QMenu" name="menuHistogramas">
+    <property name="title">
+     <string>Histogramas</string>
+    </property>
+    <addaction name="actionHistogramas"/>
+    <addaction name="actionAuto_Escala"/>
+    <addaction name="actionEqualiza_o"/>
+    <addaction name="actionLimiariza_oGlobal"/>
+    <addaction name="actionLimiariza_o_Otsu"/>
+   </widget>
+   <widget class="QMenu" name="menuSegmenta_o">
+    <property name="title">
+     <string>Segmentação</string>
+    </property>
+    <addaction name="actionSegmenta_o"/>
+   </widget>
+   <widget class="QMenu" name="menuMorfologia">
+    <property name="title">
+     <string>Morfologia</string>
+    </property>
+    <addaction name="actionDilata_o"/>
+    <addaction name="actionEros_o"/>
+    <addaction name="actionAbertura"/>
+    <addaction name="actionFechamento"/>
+    <addaction name="actionPersonalizado"/>
+   </widget>
+   <widget class="QMenu" name="menuCaracteristicas">
+    <property name="title">
+     <string>Caracteristicas</string>
+    </property>
+    <addaction name="actionOrienta_o"/>
+    <addaction name="actionDimens_es"/>
+    <addaction name="actionPosi_ao"/>
+    <addaction name="action_rea"/>
+   </widget>
+   <addaction name="menuIn_cio"/>
+   <addaction name="menuConverter"/>
+   <addaction name="menuOp_Aritim_ticas"/>
+   <addaction name="menuTransforma_o"/>
+   <addaction name="menuDetec_Borda"/>
+   <addaction name="menuFiltos"/>
+   <addaction name="menuHistogramas"/>
+   <addaction name="menuSegmenta_o"/>
+   <addaction name="menuCaracteristicas"/>
+   <addaction name="menuMorfologia"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAbrir_Imagem_1">
+   <property name="text">
+    <string>Abrir Imagem 1</string>
+   </property>
+  </action>
+  <action name="actionAbrir_Imagem_2">
+   <property name="text">
+    <string>Abrir Imagem 2</string>
+   </property>
+  </action>
+  <action name="actionSalvar_Resultado">
+   <property name="text">
+    <string>Salvar Resultado</string>
+   </property>
+  </action>
+  <action name="actionSair">
+   <property name="text">
+    <string>Sair</string>
+   </property>
+  </action>
+  <action name="actionTons_de_Cinza">
+   <property name="text">
+    <string>Tons de Cinza</string>
+   </property>
+  </action>
+  <action name="actionBin_rio">
+   <property name="text">
+    <string>Binário</string>
+   </property>
+  </action>
+  <action name="actionSoma">
+   <property name="text">
+    <string>Soma</string>
+   </property>
+  </action>
+  <action name="actionSubtra_o">
+   <property name="text">
+    <string>Subtração</string>
+   </property>
+  </action>
+  <action name="actionMult">
+   <property name="text">
+    <string>Multiplicação</string>
+   </property>
+  </action>
+  <action name="actionDivisao">
+   <property name="text">
+    <string>Divisão</string>
+   </property>
+  </action>
+  <action name="actionAnd">
+   <property name="text">
+    <string>And</string>
+   </property>
+  </action>
+  <action name="actionOr">
+   <property name="text">
+    <string>Or</string>
+   </property>
+  </action>
+  <action name="actionNot">
+   <property name="text">
+    <string>Not</string>
+   </property>
+  </action>
+  <action name="actionXor">
+   <property name="text">
+    <string>Xor</string>
+   </property>
+  </action>
+  <action name="actionEscalonamento">
+   <property name="text">
+    <string>Escalonamento</string>
+   </property>
+  </action>
+  <action name="actionTransla_o">
+   <property name="text">
+    <string>Translação</string>
+   </property>
+  </action>
+  <action name="actionRota_o">
+   <property name="text">
+    <string>Rotação</string>
+   </property>
+  </action>
+  <action name="actionSobel">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
+  <action name="actionKirsch">
+   <property name="text">
+    <string>Kirsch</string>
+   </property>
+  </action>
+  <action name="actionCanny">
+   <property name="text">
+    <string>Canny</string>
+   </property>
+  </action>
+  <action name="actionPrimeira_Ordem">
+   <property name="text">
+    <string>Primeira Ordem</string>
+   </property>
+  </action>
+  <action name="actionSegunda_Ordem">
+   <property name="text">
+    <string>Segunda Ordem</string>
+   </property>
+  </action>
+  <action name="actionPrimeira_Ordem_2">
+   <property name="text">
+    <string>Primeira Ordem</string>
+   </property>
+  </action>
+  <action name="actionSegunda_Ordem_2">
+   <property name="text">
+    <string>Segunda Ordem</string>
+   </property>
+  </action>
+  <action name="actionOp_es">
+   <property name="text">
+    <string>Opções</string>
+   </property>
+  </action>
+  <action name="actionGaussiano">
+   <property name="text">
+    <string>Gaussiano</string>
+   </property>
+  </action>
+  <action name="action3x3">
+   <property name="text">
+    <string>3x3</string>
+   </property>
+  </action>
+  <action name="action5x5">
+   <property name="text">
+    <string>5x5</string>
+   </property>
+  </action>
+  <action name="action9x9">
+   <property name="text">
+    <string>9x9</string>
+   </property>
+  </action>
+  <action name="actionHistogramas">
+   <property name="text">
+    <string>Histograma</string>
+   </property>
+  </action>
+  <action name="actionAuto_Escala">
+   <property name="text">
+    <string>Auto Escala</string>
+   </property>
+  </action>
+  <action name="actionEqualiza_o">
+   <property name="text">
+    <string>Equalização</string>
+   </property>
+  </action>
+  <action name="actionLimiariza_oGlobal">
+   <property name="text">
+    <string>Limiarização Global</string>
+   </property>
+  </action>
+  <action name="actionLimiariza_o_Otsu">
+   <property name="text">
+    <string>Limiarização Otsu</string>
+   </property>
+  </action>
+  <action name="actionM_dia">
+   <property name="text">
+    <string>Média</string>
+   </property>
+  </action>
+  <action name="actionMediana">
+   <property name="text">
+    <string>Mediana</string>
+   </property>
+  </action>
+  <action name="actionLaplaciano">
+   <property name="text">
+    <string>Laplaciano</string>
+   </property>
+  </action>
+  <action name="actionPassa_Alta">
+   <property name="text">
+    <string>Passa Alta</string>
+   </property>
+  </action>
+  <action name="actionDilata_o">
+   <property name="text">
+    <string>Dilatação</string>
+   </property>
+  </action>
+  <action name="actionEros_o">
+   <property name="text">
+    <string>Erosão</string>
+   </property>
+  </action>
+  <action name="actionAbertura">
+   <property name="text">
+    <string>Abertura</string>
+   </property>
+  </action>
+  <action name="actionFechamento">
+   <property name="text">
+    <string>Fechamento</string>
+   </property>
+  </action>
+  <action name="actionOrienta_o">
+   <property name="text">
+    <string>Orientação</string>
+   </property>
+  </action>
+  <action name="actionDimens_es">
+   <property name="text">
+    <string>Dimensões</string>
+   </property>
+  </action>
+  <action name="actionPosi_ao">
+   <property name="text">
+    <string>Posição</string>
+   </property>
+  </action>
+  <action name="action_rea">
+   <property name="text">
+    <string>Área</string>
+   </property>
+  </action>
+  <action name="actionSegmenta_o">
+   <property name="text">
+    <string>Segmentação</string>
+   </property>
+  </action>
+  <action name="actionR">
+   <property name="text">
+    <string>R</string>
+   </property>
+  </action>
+  <action name="actionG">
+   <property name="text">
+    <string>G</string>
+   </property>
+  </action>
+  <action name="actionB">
+   <property name="text">
+    <string>B</string>
+   </property>
+  </action>
+  <action name="actionOpera_o_por_escalar">
+   <property name="text">
+    <string>Operação por Escalar</string>
+   </property>
+  </action>
+  <action name="actionPersonalizado">
+   <property name="text">
+    <string>Personalizado</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

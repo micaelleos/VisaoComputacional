@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "C:\\Users\\Micaelle\\Anaconda3\\envs\\biochaves\\python.exe",
+    "terminal.explorerKind": "external",
+    "python.linting.pylintArgs": ["--extension-pkg-whitelist=cv2"]
+}
