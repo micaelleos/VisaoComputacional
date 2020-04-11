@@ -18,7 +18,7 @@ from PyQt5.QtCore import Qt, pyqtSlot
 class Dialogo(QDialog):
     def __init__(self, parent=None):
         QDialog.__init__(self, parent)
-        loadUi('Dialog1.ui',self)
+        loadUi('Interfaces/Dialog1.ui',self)
         self.setWindowIcon(QIcon('Icone.png'))
         self.pushButton.clicked.connect(self.BotaoOk)
         self.pushButton_2.clicked.connect(self.Cancelar)
@@ -67,7 +67,7 @@ class Dialogo(QDialog):
 class Dialogo2(QDialog):
     def __init__(self, parent=None):
         QDialog.__init__(self, parent)
-        loadUi('Dialog2.ui',self)
+        loadUi('Interfaces/Dialog2.ui',self)
         self.setWindowTitle('Translação')
         self.setWindowIcon(QIcon('Icone.png'))
         self.pushButton.clicked.connect(self.BotaoOk)
@@ -88,7 +88,7 @@ class Dialogo2(QDialog):
 class Dialogo4(QDialog):
     def __init__(self, parent=None):
         QDialog.__init__(self, parent)
-        loadUi('Dialog4.ui',self)
+        loadUi('Interfaces/Dialog4.ui',self)
         self.setWindowTitle('Filtro Gaussiano')
         self.setWindowIcon(QIcon('Icone.png'))
         self.pushButton.clicked.connect(self.BotaoOk)
@@ -110,7 +110,7 @@ class Dialogo4(QDialog):
 class Dialogo5(QDialog):
     def __init__(self, parent=None):
         QDialog.__init__(self, parent)
-        loadUi('Dialog5.ui',self)
+        loadUi('Interfaces/Dialog5.ui',self)
         self.setWindowTitle('Operação por Escalar')
         self.setWindowIcon(QIcon('Icone.png'))
         self.cancelou = 0
@@ -131,7 +131,7 @@ class Dialogo5(QDialog):
 class Morfologia(QDialog):
     def __init__(self, x, y ,parent = None):
         QDialog.__init__(self, parent)
-        loadUi('Dialog6.ui',self)
+        loadUi('Interfaces/Dialog6.ui',self)
         self.setWindowTitle('Operação por Escalar')
         self.setWindowIcon(QIcon('Icone.png'))
         self.setMouseTracking(True)
@@ -243,7 +243,7 @@ class Morfologia(QDialog):
 class Dialogo7(QDialog):
     def __init__(self, parent=None):
         QDialog.__init__(self, parent)
-        loadUi('Dialog7.ui',self)
+        loadUi('Interfaces/Dialog7.ui',self)
         self.setWindowTitle('Operação por Escalar')
         self.setWindowIcon(QIcon('Icone.png'))
         self.cancelou = 0
@@ -279,7 +279,7 @@ class Dialogo7(QDialog):
 class MyApp(QMainWindow):
     def __init__(self):
         super(MyApp, self).__init__()
-        loadUi('Interface.ui',self )
+        loadUi('Interfaces/Interface.ui',self )
         self.setWindowTitle('Visão Computacional')
         self.setWindowIcon(QIcon('Icone.png'))
         self.menubar.setNativeMenuBar(False)
