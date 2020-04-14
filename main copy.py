@@ -80,7 +80,7 @@ class MyApp(QMainWindow):
         self.actionPassa_Alta.triggered.connect(self.passaAlta)
         #Histogramas
         self.actionHistogramas.triggered.connect(self.Histo)
-        #self.actionAuto_Escala.triggered.connect(self.Auto)
+        self.actionAuto_Escala.triggered.connect(self.Auto)
         self.actionEqualiza_o.triggered.connect(self.Equaliza)
         self.actionLimiariza_oGlobal.triggered.connect(self.Global)
         self.actionLimiariza_o_Otsu.triggered.connect(self.Otsu)
@@ -91,7 +91,21 @@ class MyApp(QMainWindow):
         self.actionAbertura.triggered.connect(self.morfoAbertura)
         self.actionFechamento.triggered.connect(self.morfoFechamento)
         
-
+    def Auto(self):
+        self.tons_de_cinza()
+        self.switch()
+        self.usar_res()
+        self.switch()
+        self.conversaoB()
+        self.usar_res()
+        self.switch()
+        self.Op_subtracao()
+        self.usar_res()
+        self.switch()
+        self.binario()
+        self.usar_res()
+        self.switch()
+        
 
     def Ordem2(self):
         self.n=2
@@ -99,10 +113,7 @@ class MyApp(QMainWindow):
     def Ordem1(self):
         self.n=1
         self.B_derivativo()
-        
     def abrir_imagem_1(self):
-        print('abrir imagem')
-
         filename = QFileDialog.getOpenFileName(self)
         if filename[0] is not '':
             self.im1 = cv2.imread(filename[0]) #abre e salva a imagem em self.orig
@@ -174,7 +185,6 @@ class MyApp(QMainWindow):
         label.setPixmap(pixmap)
 
     def tons_de_cinza(self): # função de conversão para tons de cinza.
-        print("Tons de cinza")
         if self.im1 is None:
              self.abrir_imagem_1(self)
         else:
@@ -189,7 +199,6 @@ class MyApp(QMainWindow):
                 QMessageBox.about(self,"Aviso", "A imagem já está em tons de cinza.")
 
     def conversaoR(self):
-        print("conversão R")
         if self.im1 is None:
              self.abrir_imagem_1(self)
         else:
@@ -202,7 +211,6 @@ class MyApp(QMainWindow):
                 QMessageBox.about(self,"Aviso", "A imagem já está em tons de cinza.")
 
     def conversaoG(self):
-        print('Connversão G')
         if self.im1 is None:
              self.abrir_imagem_1(self)
         else:
@@ -215,8 +223,6 @@ class MyApp(QMainWindow):
                 QMessageBox.about(self,"Aviso", "A imagem já está em tons de cinza.")
 
     def conversaoB(self):
-        print('conversãoB')
-
         if self.im1 is None:
              self.abrir_imagem_1(self)
         else:
@@ -230,8 +236,6 @@ class MyApp(QMainWindow):
 
 
     def binario(self):
-        print('binário')
-
         if self.im1 is None: # se não tem imagem im1, abre e converte para tons de cinza.
             self.abrir_imagem_1()
             self.tons_de_cinza()
@@ -293,7 +297,6 @@ class MyApp(QMainWindow):
         
         
     def Op_soma(self):
-        print('op soma')
         if self.im1 is None: # se não tem imagem, abre.
             self.abrir_imagem_1()
         if self.im2 is None:
@@ -314,8 +317,6 @@ class MyApp(QMainWindow):
             QMessageBox.about(self,"Erro","As duas imagens devem ser do mesmo tamanho para esta operação.")
         
     def Op_subtracao(self):
-        print('op sub')
-
         if self.im1 is None:
             self.abrir_imagem_1()
         if self.im2 is None:
@@ -404,8 +405,6 @@ class MyApp(QMainWindow):
         self.atualizarIm('im_res')
           
     def Op_and(self):
-        print('op and')
-
         #Se não tem imagem im1, abre.
         if self.im1 is None:
             self.abrir_imagem_1()
@@ -424,8 +423,6 @@ class MyApp(QMainWindow):
             self.atualizarIm('im_res')
 
     def Op_or(self):
-        print('op or')
-
         #Se não tem imagem im1, abre.
         if self.im1 is None:
             self.abrir_imagem_1()
@@ -445,8 +442,6 @@ class MyApp(QMainWindow):
             self.atualizarIm('im_res')
 
     def Op_not(self):
-        print('op not')
-
         #Se não tem imagem im1, abre.
         if self.im1 is None:
             self.abrir_imagem_1()
@@ -462,8 +457,6 @@ class MyApp(QMainWindow):
             self.atualizarIm('im_res')
 
     def Op_xor(self):
-        print('op xor')
-
         #Se não tem imagem im1, abre.
         if self.im1 is None:
             self.abrir_imagem_1()
@@ -479,8 +472,6 @@ class MyApp(QMainWindow):
             self.atualizarIm('im_res')
 
     def escalonamento(self,px,py,escalar,tipo):
-        print('escalonamento')
-
         sx=escalar
         sy=escalar
         
