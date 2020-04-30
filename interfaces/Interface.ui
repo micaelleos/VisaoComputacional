@@ -335,6 +335,7 @@
      <string>Histogramas</string>
     </property>
     <addaction name="actionHistogramas"/>
+    <addaction name="actionCalculo_de_CDF"/>
     <addaction name="actionAuto_Escala"/>
     <addaction name="actionEqualiza_o"/>
     <addaction name="actionLimiariza_oGlobal"/>
@@ -635,6 +636,11 @@
   <action name="actionPersonalizado">
    <property name="text">
     <string>Personalizado</string>
+   </property>
+  </action>
+  <action name="actionCalculo_de_CDF">
+   <property name="text">
+    <string>Cálculo de CDF</string>
    </property>
   </action>
  </widget>

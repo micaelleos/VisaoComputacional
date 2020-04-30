@@ -20,20 +20,25 @@ k=255
 prob=np.zeros([k])
 b=int(255/(k-1))
 
+nivel_map=np.arange(0,k)/k
 
 for i in range(0,k,1):
     prob[i]=np.sum(hist[i*b:b+i*b])+prob[i-1]
 
-
+print(prob)
 
 p=0
+
+
 
 for l in range(img.shape[0]):
     for j in range(img.shape[1]):
         p=int(imagem[l,j]*k/255)-1
-        #print(imagem[l,j])
-        imagem[l,j]=prob[p]*imagem[l,j]
-        #print(imagem[l,j])
+        idx = (np.abs(nivel_map-prob[p])).argmin()
+        print(prob[p],nivel_map[idx])
+        print(idx)
+        imagem[l,j]=idx#prob[p]*imagem[l,j]
+
 
 hist2=np.zeros([255])
 for i in range(255):

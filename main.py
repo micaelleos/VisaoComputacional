@@ -80,6 +80,7 @@ class MyApp(QMainWindow):
         self.actionPassa_Alta.triggered.connect(self.passaAlta)
         #Histogramas
         self.actionHistogramas.triggered.connect(self.Histo)
+        self.actionCalculo_de_CDF.triggered.connect(self.cdf)
         self.actionAuto_Escala.triggered.connect(self.Auto)
         self.actionEqualiza_o.triggered.connect(self.Equaliza)
         self.actionLimiariza_oGlobal.triggered.connect(self.Global)
@@ -961,53 +962,34 @@ class MyApp(QMainWindow):
 
     def Equaliza(self):
         imagem=self.im1.astype('int')
-        
-        #RECALCULO DE HISTOGRAMA
-        a= len(imagem)
-        b= len(imagem[0])
-        hist=np.zeros([255])
-        for i in range(255):
-            hist[i]=sum(sum(imagem==i))
+        if sum(self.hist)==0:
+            QMessageBox.about(self,"Erro", "Calcule primeiramente o histograma.")
+        else:
+            hist=self.hist
 
-        hist=hist/(a*b)
+            #CALCULO DA CDF 
 
-        #CALCULO DA CDF 
+            k=255
+            prob=np.zeros([k])
 
-        k=255
-        prob=np.zeros([k])
+            nivel=int(255/(k-1))
+            nivel_map=np.arange(0,k)/k
+            p=0
 
-        nivel=int(255/(k-1))
+            im_res=np.zeros(imagem.shape)
 
-        p=0
+            for l in range(0,k,1):
+                prob[l]=np.sum(hist[l*nivel:nivel+l*nivel])+prob[l-1]
 
-        im_res=np.zeros(imagem.shape)
+            for i in range(imagem.shape[0]):
+                for j in range(imagem.shape[1]):
+                    p=int(imagem[i,j]*k/255)-1
+                    idx = (np.abs(nivel_map-prob[p])).argmin()
+                    im_res[i,j]=idx
 
-        for l in range(0,k,1):
-            prob[l]=np.sum(hist[l*nivel:nivel+l*nivel])+prob[l-1]
 
-        for i in range(imagem.shape[0]):
-            for j in range(imagem.shape[1]):
-                p=int(imagem[i,j]*k/255)-1
-                im_res[i,j]=prob[p]*imagem[i,j]
-
- 
-        cdf=np.zeros([255])
-
-        for i in range(255):
-            if i > 2:
-                cdf[i]= cdf[i-1] + hist[i]
-
-            
-        fig = plt.figure()
-        fig.canvas.set_window_title('Visão Computacional - CDF')
-        plt.title('Equalização')
-        plt.xlabel('Pixels')
-        plt.ylabel('Probabilidade Acumulada') 
-        plt.plot(cdf)
-        plt.show()
-
-        self.im_res=im_res.astype('uint8')
-        self.atualizarIm('im_res')
+            self.im_res=im_res.astype('uint8')
+            self.atualizarIm('im_res')
             
     def Auto(self):
         imagem=self.im1.astype('int')
@@ -1043,6 +1025,26 @@ class MyApp(QMainWindow):
 
         self.im_res=mascara.astype('uint8')
         self.atualizarIm('im_res')
+
+    def cdf(self):
+        if sum(self.hist)==0:
+            QMessageBox.about(self,"Erro", "Calcule primeiramente o histograma.")
+        else:
+            cdf=np.zeros([255])
+            hist=self.hist
+
+            for i in range(255):
+                if i > 2:
+                    cdf[i]= cdf[i-1] + hist[i]
+
+                
+            fig = plt.figure()
+            fig.canvas.set_window_title('Visão Computacional - CDF')
+            plt.title('CDF')
+            plt.xlabel('Pixels')
+            plt.ylabel('Probabilidade Acumulada') 
+            plt.plot(cdf)
+            plt.show()
 
     def Otsu(self):
         if sum(self.hist)==0:
