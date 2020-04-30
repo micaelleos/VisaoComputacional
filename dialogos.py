@@ -175,8 +175,9 @@ class Morfologia(QDialog):
         cor_x=int(np.floor(event.x()/pixel_x*2))
         cor_y=int(np.floor(event.y()/pixel_y*2))
 
-        if cor_x <=self.x and cor_y <=self.y:
-            self.novaImagem(cor_x,cor_y)
+        if cor_x <= self.x-1 and cor_y <= self.y-1:
+           self.novaImagem(cor_x,cor_y)
+
 
     def novaImagem(self, my, mx):
         
@@ -202,14 +203,14 @@ class Morfologia(QDialog):
                     imagem[m*10:m*10+10,n*10:n*10+10]=0
 
                     if self.referencia[m,n] == 1:
-                        for i in range(1,11,1):
+                        for i in range(1,10,1):
                             imagem[m*10+i,n*10+i]=255
                             imagem[m*10+10-i,n*10+i]=255    
                 
                 else:
                     imagem[m*10:m*10+10,n*10:n*10+10]=255
                     if self.referencia[m, n] == 1:
-                        for i in range(1, 11, 1):
+                        for i in range(1, 10, 1):
                             imagem[m*10+i, n*10+i] = 0
                             imagem[m*10+10-i, n*10+i] = 0
 

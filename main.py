@@ -80,7 +80,7 @@ class MyApp(QMainWindow):
         self.actionPassa_Alta.triggered.connect(self.passaAlta)
         #Histogramas
         self.actionHistogramas.triggered.connect(self.Histo)
-        #self.actionAuto_Escala.triggered.connect(self.Auto)
+        self.actionAuto_Escala.triggered.connect(self.Auto)
         self.actionEqualiza_o.triggered.connect(self.Equaliza)
         self.actionLimiariza_oGlobal.triggered.connect(self.Global)
         self.actionLimiariza_o_Otsu.triggered.connect(self.Otsu)
@@ -230,7 +230,6 @@ class MyApp(QMainWindow):
 
 
     def binario(self):
-        print('binário')
 
         if self.im1 is None: # se não tem imagem im1, abre e converte para tons de cinza.
             self.abrir_imagem_1()
@@ -346,13 +345,16 @@ class MyApp(QMainWindow):
             elif self.op_slider == 2:# -> Divisão
                 self.label_limiar.setText(str(float(self.verticalSlider.value()/255)))
                 self.Op_divisao()
-            if self.op_slider == 3:# -> Binário
+            elif self.op_slider == 3:# -> Binário
                 if len(self.im1.shape) != 3:
                     self.label_limiar.setText(str(self.verticalSlider.value()))
                     self.binario()
                 else:
                     self.tons_de_cinza()
                     self.atualizar_lim()
+            elif self.op_slider == 4:  # -> euqalização, define quantidade de níveis de cinza
+                self.label_limiar.setText(str(self.verticalSlider.value()))
+                self.Equaliza()
         
     def Op_multiplicacao(self):
         if self.im1 is None: # Se não tem imagem im1, abre.
@@ -583,15 +585,12 @@ class MyApp(QMainWindow):
 
         px=a #coordenada de rotação para o eixo x
         py=b #coordenada de rotação para o eixo y
-        print(px,py)
-        print(tipo)
+
         
         if tipo == "centro":
             px=a/2
             py=b/2
             print("centro acionado")
-
-        print(px,py)
 
         a1 = int(-px)
         b1 = int(-py)
@@ -961,26 +960,67 @@ class MyApp(QMainWindow):
         plt.show()
 
     def Equaliza(self):
+        imagem=self.im1.astype('int')
+        
+        #RECALCULO DE HISTOGRAMA
+        a= len(imagem)
+        b= len(imagem[0])
+        hist=np.zeros([255])
+        for i in range(255):
+            hist[i]=sum(sum(imagem==i))
 
-        if sum(self.hist)==0:
-            QMessageBox.about(self,"Erro", "Calcule primeiramente o histograma.")
-        else:    
-            hist=self.hist
-            cdf=np.zeros([255])
+        hist=hist/(a*b)
 
-            for i in range(255):
-                if i > 2:
-                    cdf[i]= cdf[i-1] + hist[i]
+        #CALCULO DA CDF 
 
-             
-            fig = plt.figure()
-            fig.canvas.set_window_title('Visão Computacional - CDF')
-            plt.title('Equalização')
-            plt.xlabel('Pixels')
-            plt.ylabel('Probabilidade Acumulada') 
-            plt.plot(cdf)
-            plt.show()
+        k=255
+        prob=np.zeros([k])
+
+        nivel=int(255/(k-1))
+
+        p=0
+
+        im_res=np.zeros(imagem.shape)
+
+        for l in range(0,k,1):
+            prob[l]=np.sum(hist[l*nivel:nivel+l*nivel])+prob[l-1]
+
+        for i in range(imagem.shape[0]):
+            for j in range(imagem.shape[1]):
+                p=int(imagem[i,j]*k/255)-1
+                im_res[i,j]=prob[p]*imagem[i,j]
+
+ 
+        cdf=np.zeros([255])
+
+        for i in range(255):
+            if i > 2:
+                cdf[i]= cdf[i-1] + hist[i]
+
             
+        fig = plt.figure()
+        fig.canvas.set_window_title('Visão Computacional - CDF')
+        plt.title('Equalização')
+        plt.xlabel('Pixels')
+        plt.ylabel('Probabilidade Acumulada') 
+        plt.plot(cdf)
+        plt.show()
+
+        self.im_res=im_res.astype('uint8')
+        self.atualizarIm('im_res')
+            
+    def Auto(self):
+        imagem=self.im1.astype('int')
+
+        im_res=np.zeros(imagem.shape)
+
+        a=imagem.max()
+        b=imagem.min()
+        im_res = (imagem - b)*(255/(a-b))
+
+        self.im_res=im_res.astype('uint8')
+        self.atualizarIm('im_res')
+
     def Global(self):
         img=self.im1.astype('int')
         a = len(img)
