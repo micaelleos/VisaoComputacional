@@ -324,10 +324,18 @@
     <property name="title">
      <string>Filtros</string>
     </property>
+    <widget class="QMenu" name="menuLaplaciano_2">
+     <property name="title">
+      <string>Laplaciano</string>
+     </property>
+     <addaction name="action3x3_2"/>
+     <addaction name="action5x5_2"/>
+     <addaction name="action9x9_2"/>
+    </widget>
     <addaction name="actionGaussiano"/>
     <addaction name="actionM_dia"/>
     <addaction name="actionMediana"/>
-    <addaction name="actionLaplaciano"/>
+    <addaction name="menuLaplaciano_2"/>
     <addaction name="actionPassa_Alta"/>
    </widget>
    <widget class="QMenu" name="menuHistogramas">
@@ -558,11 +566,6 @@
     <string>Mediana</string>
    </property>
   </action>
-  <action name="actionLaplaciano">
-   <property name="text">
-    <string>Laplaciano</string>
-   </property>
-  </action>
   <action name="actionPassa_Alta">
    <property name="text">
     <string>Passa Alta</string>
@@ -641,6 +644,21 @@
   <action name="actionCalculo_de_CDF">
    <property name="text">
     <string>Cálculo de CDF</string>
+   </property>
+  </action>
+  <action name="action3x3_2">
+   <property name="text">
+    <string>3x3</string>
+   </property>
+  </action>
+  <action name="action5x5_2">
+   <property name="text">
+    <string>5x5</string>
+   </property>
+  </action>
+  <action name="action9x9_2">
+   <property name="text">
+    <string>9x9</string>
    </property>
   </action>
  </widget>

@@ -78,6 +78,9 @@ class MyApp(QMainWindow):
         self.actionM_dia.triggered.connect(self.media)
         self.actionMediana.triggered.connect(self.mediana)
         self.actionPassa_Alta.triggered.connect(self.passaAlta)
+        self.action3x3_2.triggered.connect(self.fLaplaciano3x3)
+        self.action5x5_2.triggered.connect(self.fLaplaciano5x5)
+        self.action9x9_2.triggered.connect(self.fLaplaciano9x9)
         #Histogramas
         self.actionHistogramas.triggered.connect(self.Histo)
         self.actionCalculo_de_CDF.triggered.connect(self.cdf)
@@ -102,8 +105,6 @@ class MyApp(QMainWindow):
         self.B_derivativo()
         
     def abrir_imagem_1(self):
-        print('abrir imagem')
-
         filename = QFileDialog.getOpenFileName(self)
         if filename[0] is not '':
             self.im1 = cv2.imread(filename[0]) #abre e salva a imagem em self.orig
@@ -175,7 +176,6 @@ class MyApp(QMainWindow):
         label.setPixmap(pixmap)
 
     def tons_de_cinza(self): # função de conversão para tons de cinza.
-        print("Tons de cinza")
         if self.im1 is None:
              self.abrir_imagem_1(self)
         else:
@@ -190,7 +190,6 @@ class MyApp(QMainWindow):
                 QMessageBox.about(self,"Aviso", "A imagem já está em tons de cinza.")
 
     def conversaoR(self):
-        print("conversão R")
         if self.im1 is None:
              self.abrir_imagem_1(self)
         else:
@@ -203,7 +202,6 @@ class MyApp(QMainWindow):
                 QMessageBox.about(self,"Aviso", "A imagem já está em tons de cinza.")
 
     def conversaoG(self):
-        print('Connversão G')
         if self.im1 is None:
              self.abrir_imagem_1(self)
         else:
@@ -216,7 +214,6 @@ class MyApp(QMainWindow):
                 QMessageBox.about(self,"Aviso", "A imagem já está em tons de cinza.")
 
     def conversaoB(self):
-        print('conversãoB')
 
         if self.im1 is None:
              self.abrir_imagem_1(self)
@@ -293,7 +290,6 @@ class MyApp(QMainWindow):
         
         
     def Op_soma(self):
-        print('op soma')
         if self.im1 is None: # se não tem imagem, abre.
             self.abrir_imagem_1()
         if self.im2 is None:
@@ -314,7 +310,6 @@ class MyApp(QMainWindow):
             QMessageBox.about(self,"Erro","As duas imagens devem ser do mesmo tamanho para esta operação.")
         
     def Op_subtracao(self):
-        print('op sub')
 
         if self.im1 is None:
             self.abrir_imagem_1()
@@ -407,7 +402,6 @@ class MyApp(QMainWindow):
         self.atualizarIm('im_res')
           
     def Op_and(self):
-        print('op and')
 
         #Se não tem imagem im1, abre.
         if self.im1 is None:
@@ -427,7 +421,6 @@ class MyApp(QMainWindow):
             self.atualizarIm('im_res')
 
     def Op_or(self):
-        print('op or')
 
         #Se não tem imagem im1, abre.
         if self.im1 is None:
@@ -448,7 +441,6 @@ class MyApp(QMainWindow):
             self.atualizarIm('im_res')
 
     def Op_not(self):
-        print('op not')
 
         #Se não tem imagem im1, abre.
         if self.im1 is None:
@@ -465,7 +457,6 @@ class MyApp(QMainWindow):
             self.atualizarIm('im_res')
 
     def Op_xor(self):
-        print('op xor')
 
         #Se não tem imagem im1, abre.
         if self.im1 is None:
@@ -482,7 +473,6 @@ class MyApp(QMainWindow):
             self.atualizarIm('im_res')
 
     def escalonamento(self,px,py,escalar,tipo):
-        print('escalonamento')
 
         sx=escalar
         sy=escalar
@@ -584,15 +574,14 @@ class MyApp(QMainWindow):
         a = len(im1)
         b = len(im1[0])
 
-        px=a #coordenada de rotação para o eixo x
-        py=b #coordenada de rotação para o eixo y
-
+        #px=a #coordenada de rotação para o eixo x
+        #py=b #coordenada de rotação para o eixo y
+        
         
         if tipo == "centro":
             px=a/2
             py=b/2
-            print("centro acionado")
-
+        
         a1 = int(-px)
         b1 = int(-py)
 
@@ -604,13 +593,12 @@ class MyApp(QMainWindow):
 
         for j in range(b):
            for i in range(a):
-              x= (i+a1)*np.cos(theta)-(j+b1)*np.sin(theta)-a1
-              y= (i+a1)*np.sin(theta)+(j+b1)*np.cos(theta)-b1
-              if -a<x<a and -b<y<b:
-                im_res[i,j]= im1[int(np.floor(x)),int(np.floor(y))]
-              if x<=0 or y<=0:
-                 im_res[i,j] = 0
-
+                x= (i+a1)*np.cos(theta)-(j+b1)*np.sin(theta)-a1
+                y= (i+a1)*np.sin(theta)+(j+b1)*np.cos(theta)-b1
+                if -a<x<a and -b<y<b:
+                    im_res[i,j]= im1[int(np.floor(x)),int(np.floor(y))]
+                if x<=0 or y<=0:
+                    im_res[i,j] = 0
         
         self.im_res = im_res.astype('uint8')
         self.atualizarIm('im_res')
@@ -621,7 +609,7 @@ class MyApp(QMainWindow):
             
         dialogo = Dialogo()
         dialogo.setWindowTitle('Rotação')
-        #dialogo.label_1.setText('Ângulo de rotação:')
+        #
         dialogo.exec_()
 
         if dialogo.cancelou == 1 :
@@ -918,8 +906,6 @@ class MyApp(QMainWindow):
         
     
     def convolucao(self,mascara,img):
-
-
         if img == 'im1':
             imagem=self.im1.astype('int')
 
@@ -1110,6 +1096,80 @@ class MyApp(QMainWindow):
         tam=5
         im_res=cv2.medianBlur(self.im1,tam)
         
+        res_max=im_res.max()
+        im_res=im_res*(255/res_max)
+
+        self.im_res=im_res.astype('uint8')
+        self.atualizarIm('im_res')      
+
+    def fLaplaciano3x3(self):
+        mascara=np.array([[0,-1,0],
+                          [-1,4,-1],
+                          [0,-1,0]])
+
+        #fazer ajuste de deslocamento causado pela convolução                  
+
+        img=self.im1.copy().astype('int')
+        imagem=self.convolucao(mascara,'im1')
+        
+        a=imagem.max()
+        b=imagem.min()
+        im = (imagem - b)*(255/(a-b+1)) -127
+        
+        a=im.max()
+        print('a:',a)
+        b=im.min()
+        print('b:',b)
+
+        im_res=img-im
+        
+        a2=im_res.max()
+        print('a2:',a)
+        b2=im_res.min()
+        print('b2:',b)
+
+        #im_res = (im_res - b2)*(255/(a2-b2))
+
+        im_res[im_res > 255] = 255
+        im_res[im_res < 0] = 0
+
+        #c=im_res.max()
+
+        #im_res=im_res*(255/c)
+
+        self.im_res=im_res.astype('uint8')
+        self.atualizarIm('im_res')
+
+    def fLaplaciano5x5(self):
+        mascara=np.array([[-1,-1,-1,-1,-1],
+                          [-1,-1,-1,-1,-1],
+                          [-1,-1,24,-1,-1],
+                          [-1,-1,-1,-1,-1],
+                          [-1,-1,-1,-1,-1]])
+
+        im=self.convolucao(mascara,'im1')
+        im_res=self.im1 - im
+
+        res_max=im_res.max()
+        im_res=im_res*(255/res_max)
+
+        self.im_res=im_res.astype('uint8')
+        self.atualizarIm('im_res')
+
+    def fLaplaciano9x9(self):
+        mascara=np.array([[-1,-1,-1,-1,-1,-1,-1,-1,-1],
+                          [-1,-1,-1,-1,-1,-1,-1,-1,-1],
+                          [-1,-1,-1,-1,-1,-1,-1,-1,-1],
+                          [-1,-1,-1,8,8,8,-1,-1,-1],
+                          [-1,-1,-1,8,8,8,-1,-1,-1],
+                          [-1,-1,-1,8,8,8,-1,-1,-1],
+                          [-1,-1,-1,-1,-1,-1,-1,-1,-1],
+                          [-1,-1,-1,-1,-1,-1,-1,-1,-1],
+                          [-1,-1,-1,-1,-1,-1,-1,-1,-1]])
+        img=self.im1.copy().astype('int')
+        im=self.convolucao(mascara,'im1')
+        im_res=img - im
+
         res_max=im_res.max()
         im_res=im_res*(255/res_max)
 
