@@ -1,7 +1,7 @@
 """
 Criado por : Micaelle Oliveira de Souza
 Disciplina : Visão Computacional
-2018.1
+2020.1
 
 """
 import sys
@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import scipy.stats as st
 
 from dialogos import *
-from PyQt5.QtWidgets import QMainWindow, QApplication, qApp, QFileDialog, QMessageBox, QLineEdit, QDialog, QCheckBox
+from PyQt5.QtWidgets import QMainWindow, QApplication, qApp, QFileDialog, QMessageBox, QLineEdit, QDialog, QCheckBox,QTableWidget,QTableWidgetItem
 from PyQt5.QtGui import QPixmap, QImage, qRgb, QIcon
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import Qt, pyqtSlot      
@@ -27,6 +27,7 @@ class MyApp(QMainWindow):
         self.im2 = None
         self.im_res = None
         self.im_aux = None
+        self.regioes= None
         self.op_slider = 0 # Constanete que varia dependendo que quem está usando o valor do vertical slider.
         self.n = 1 # n sei o que é
         self.hist=np.zeros([255]) # histograma
@@ -94,6 +95,11 @@ class MyApp(QMainWindow):
         self.actionEros_o.triggered.connect(self.morfoErosao)
         self.actionAbertura.triggered.connect(self.morfoAbertura)
         self.actionFechamento.triggered.connect(self.morfoFechamento)
+        #segmentação
+        self.actionSegmenta_o.triggered.connect(self.Segmentacao)
+        #Extração de Características
+        self.actionExtrair.triggered.connect(self.ExtraCaract)
+
         
 
 
@@ -1347,6 +1353,154 @@ class MyApp(QMainWindow):
                 
                 self.im_res=img_res.astype('uint8')
                 self.atualizarIm('im_res')
+
+    def Segmentacao(self):
+        img=self.im1.copy()
+        if np.any((img[:, :] != 0)&(img[:, :] != 255 )):
+            QMessageBox.about(self,"Erro", "Este método de segmentação recebe imagens binárias. Por favor, inicialmente, converta a imagem para binário")
+        
+        else:
+            a1,a2 = np.shape(img) # dimensões da imagem
+
+            masc = np.zeros([a1,a2]) # imagem de marcação de região
+            regiao=0
+            flag={} #para marcar pixels com regiões multiplas
+            x=0
+
+            for i in range(2,a1-1,1):
+                for j in range(2,a2-1,1):
+                    if (img[i,j] == 255) and (masc[i,j] == 0) :  # ativo e não marcado
+                        vizi=masc[i-1:i+2,j-1:j+2]
+                        if any(vizi[vizi!=0]):
+                            #repete a região
+                            b=(img[i-1:i+2,j-1:j+2]) != 0 #mascara para associação de valores
+                            value_reg=(vizi[vizi!=0])
+                            masc[i-1:i+2,j-1:j+2] = b.astype('int')*value_reg[0]
+
+                        else:
+                            #ver ser em masc se vai acontecer multipla marcação
+                            vizi_16=masc[i-3:i+4,j-3:j+4]
+                            if any(vizi_16[vizi_16!=0]):
+                                x= (vizi_16[vizi_16!=0])
+                                x=x.astype('int')
+                                flag[x[0]]=regiao+1
+
+                            regiao=regiao+1
+                            b=(img[i-1:i+2,j-1:j+2]) != 0
+                            masc[i-1:i+2,j-1:j+2] = b.astype('int')*regiao
+                            #região nova
+
+            #correção de multipla marcação
+            for x in flag:
+                regiao= regiao - 1
+                masc[masc==x]=flag[x]
+
+            #corrigir diferentes regiões conectadas
+            for i in range(2,a1-1,1):
+                for j in range(2,a2-1,1):
+                    if (img[i,j] == 255):
+                        vizinhanca=masc[i-1:i+1,j-1:j+1] #procurar numa vizinhança de 8 pixels 
+                        valores=np.unique(vizinhanca) # numeração de região que não sejam únicos
+                        if (any(vizinhanca[vizinhanca!=0]) and (valores.shape[0]>2)) :#or (any(vizinhanca[vizinhanca==0]) and (valores.shape[0]>2))  : # concertar q tá errado, e quando tem 0,1,2 ?
+                            for k in range(1,valores.shape[0]-1):
+                                masc[masc==valores[k]]= valores[k+1]
+            
+            #Corrigir regiões  muito pequenas
+            values=np.unique(masc) 
+            cont={}
+            for k in values:
+                cont[k]=np.count_nonzero(masc == k)
+                if cont[k] < 0.01*a1*a2: # se uma região é menor que 1% da área da imagem, ela é marcada como fundo
+                    masc[masc == k] = 0
+
+            #organizar numeração das regiões
+            values=np.unique(masc)
+            d=0
+            for l in values:
+                masc[masc==l]=d
+                d=d+1
+
+            self.regioes = masc.copy()
+            label=np.unique(masc)
+            a=label.shape[0]
+            #exibição de regiões
+            img_res=masc*(255/a)
+            label=label.astype('int').astype('str')
+
+            self.im_res=img_res.astype('uint8')
+            self.atualizarIm('im_res')
+
+            self.tableWidget = QTableWidget()
+            self.tableWidget.setColumnCount(2)
+            self.tableWidget.setRowCount(a)
+            self.tableWidget.setHorizontalHeaderLabels(['Regiões','Nível de Cinza'])
+            for x in range(a):
+                self.tableWidget.setItem(x,1, QTableWidgetItem(str(int(x*(255/a)))))
+                self.tableWidget.setItem(x,0, QTableWidgetItem(label[x]))
+            #self.tableWidget.setVerticalHeaderLabels(label)
+            self.tableWidget.setWindowTitle('Regiões Segmentadas')
+            self.tableWidget.setWindowIcon(QIcon('Icone.png'))
+            self.tableWidget.show()
+
+    def ExtraCaract(self):
+        regioes=self.regioes
+        if regioes is None:
+            QMessageBox.about(self,"Erro", "Por favor, segmente a imagem inicialmente")
+        else:
+            tipo=np.unique(regioes).astype('int')
+            dados={}
+            for x in tipo:
+                if(x!=0):
+                    a1,a2 = np.shape(regioes)
+                    area=np.count_nonzero(regioes == x)
+                    centro_massa=[0,0]
+                    a=0
+                    b=0
+                    c=0
+                    for i in range(a1):
+                        for j in range(a2):
+                            if regioes[i,j] == x:
+                                centro_massa[0]=centro_massa[0] + j/area 
+                                centro_massa[1]=centro_massa[1] + i/area
+                                a= a + i**2
+                                b= b + i*j
+                                c= c + j**2
+                                #dá pra calcular tudo num mesmo loop
+                    teta1=(np.arcsin(b/(np.sqrt(b**2+(a-c)**2)))/2)*180/np.pi
+                    teta1=np.around(teta1,decimals=2)
+                    centro_massa[0]=int(centro_massa[0])
+                    centro_massa[1]=int(centro_massa[1])
+                    dados[x]=[area,centro_massa,teta1]
+                    
+            a=tipo.shape[0]
+            tipo=tipo.astype('int').astype('str')
+            img=regioes*(255/a)
+            img_res=np.zeros([a1,a2,3])
+            img_res[:,:,0]=img
+            img_res[:,:,1]=img
+            img_res[:,:,2]=img
+            for k in dados:
+                img_res=cv2.circle(	img_res, tuple(dados[k][1]), 3, (0, 255, 0),-1)
+                #desenhar linha quando tiver dimensões
+            self.im_res=img_res.astype('uint8')
+            self.atualizarIm('im_res')
+
+            self.tableWidget1 = QTableWidget()
+            self.tableWidget1.setColumnCount(5)
+            self.tableWidget1.setRowCount(a)
+            self.tableWidget1.setHorizontalHeaderLabels(['Regiões','Área','Centro de massa','Orientação','Dimensão'])
+            for h in dados:
+                self.tableWidget1.setItem(h,3, QTableWidgetItem(str(dados[h][2])))
+                self.tableWidget1.setItem(h,2, QTableWidgetItem(str(tuple(dados[h][1]))))
+                self.tableWidget1.setItem(h,1, QTableWidgetItem(str(dados[h][0])))
+                self.tableWidget1.setItem(h,0, QTableWidgetItem(str(tipo[h])))
+            self.tableWidget1.setWindowTitle('Características das Regiões')
+            self.tableWidget1.setGeometry(200,200,550,200)
+            self.tableWidget1.setWindowIcon(QIcon('Icone.png'))
+            self.tableWidget1.show()
+            
+            #dimensão
+
             
         
 app = QApplication(sys.argv)

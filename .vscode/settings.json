@@ -1,5 +1,16 @@
 {
-    "python.pythonPath": "D:\\Users\\micae\\Anaconda3\\envs\\biochaves\\python.exe",
     "terminal.explorerKind": "external",
-    "python.linting.pylintArgs": ["--extension-pkg-whitelist=cv2"]
+    "python.linting.pylintArgs": [
+        "--extension-pkg-whitelist=cv2"
+    ],
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        ".",
+        "-p",
+        "*test.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.unittestEnabled": true
 }

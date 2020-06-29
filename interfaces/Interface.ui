@@ -369,10 +369,7 @@
     <property name="title">
      <string>Caracteristicas</string>
     </property>
-    <addaction name="actionOrienta_o"/>
-    <addaction name="actionDimens_es"/>
-    <addaction name="actionPosi_ao"/>
-    <addaction name="action_rea"/>
+    <addaction name="actionExtrair"/>
    </widget>
    <addaction name="menuIn_cio"/>
    <addaction name="menuConverter"/>
@@ -659,6 +656,11 @@
   <action name="action9x9_2">
    <property name="text">
     <string>9x9</string>
+   </property>
+  </action>
+  <action name="actionExtrair">
+   <property name="text">
+    <string> Extrair Característica</string>
    </property>
   </action>
  </widget>
