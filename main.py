@@ -51,7 +51,7 @@ class MyApp(QMainWindow):
         self.actionG.triggered.connect(self.conversaoG)
         self.actionB.triggered.connect(self.conversaoB)
         self.actionBin_rio.triggered.connect(self.binario)
-        #Operação
+        #Operações Lógicas e Aritméticas
         self.actionOpera_o_por_escalar.triggered.connect(self.abrirDialog5)
         self.actionSoma.triggered.connect(self.Op_soma)
         self.actionSubtra_o.triggered.connect(self.Op_subtracao)
@@ -61,7 +61,7 @@ class MyApp(QMainWindow):
         self.actionOr.triggered.connect(self.Op_or)
         self.actionNot.triggered.connect(self.Op_not)
         self.actionXor.triggered.connect(self.Op_xor)
-        #Transformação
+        #Transformação Geométrica
         self.actionEscalonamento.triggered.connect(self.abrirDialog1)
         self.actionTransla_o.triggered.connect(self.abrirDialog2)
         self.actionRota_o.triggered.connect(self.abrirDialog3)
@@ -1410,7 +1410,7 @@ class MyApp(QMainWindow):
             cont={}
             for k in values:
                 cont[k]=np.count_nonzero(masc == k)
-                if cont[k] < 0.01*a1*a2: # se uma região é menor que 1% da área da imagem, ela é marcada como fundo
+                if cont[k] < 0.001*a1*a2: # se uma região é menor que 1% da área da imagem, ela é marcada como fundo
                     masc[masc == k] = 0
 
             #organizar numeração das regiões
@@ -1466,12 +1466,36 @@ class MyApp(QMainWindow):
                                 b= b + i*j
                                 c= c + j**2
                                 #dá pra calcular tudo num mesmo loop
+                    
+                    
                     teta1=(np.arcsin(b/(np.sqrt(b**2+(a-c)**2)))/2)*180/np.pi
                     teta1=np.around(teta1,decimals=2)
+                    teta2=(np.arcsin(-b/(np.sqrt(b**2+(a-c)**2)))/2)*180/np.pi
+                    teta2=np.around(teta2,decimals=2)
+                    teta=teta1*np.pi/180
                     centro_massa[0]=int(centro_massa[0])
                     centro_massa[1]=int(centro_massa[1])
-                    dados[x]=[area,centro_massa,teta1]
+
+                    x_p=np.zeros(a2)
+                    y_p=np.zeros(a1)
+        
+                    for i1 in range(a1):
+                        for j1 in range(a2):
+                            if regioes[i1,j1] == x:
+                                r=np.sqrt(i1**2+j1**2)
+                                alfa=np.arcsin(i1/r)
+                                py=int(np.floor(r*np.sin(-teta+alfa)))
+                                px=int(np.floor(r*np.cos(-teta+alfa)))
+                                if (px < a2) and (py < a1) : 
+                                    x_p[px]=1
+                                    y_p[py]=1
+
+                    t_x=np.count_nonzero(x_p == 1)
+                    t_y=np.count_nonzero(y_p == 1)
                     
+                    dados[x]=[area,centro_massa,teta1,(t_x,t_y)]
+
+            #Imagem para exibição        
             a=tipo.shape[0]
             tipo=tipo.astype('int').astype('str')
             img=regioes*(255/a)
@@ -1480,16 +1504,19 @@ class MyApp(QMainWindow):
             img_res[:,:,1]=img
             img_res[:,:,2]=img
             for k in dados:
+                #colocar numeração nos pontos
                 img_res=cv2.circle(	img_res, tuple(dados[k][1]), 3, (0, 255, 0),-1)
                 #desenhar linha quando tiver dimensões
             self.im_res=img_res.astype('uint8')
             self.atualizarIm('im_res')
 
+            #Criação da tabela de dados
             self.tableWidget1 = QTableWidget()
             self.tableWidget1.setColumnCount(5)
             self.tableWidget1.setRowCount(a)
             self.tableWidget1.setHorizontalHeaderLabels(['Regiões','Área','Centro de massa','Orientação','Dimensão'])
             for h in dados:
+                self.tableWidget1.setItem(h,4, QTableWidgetItem(str(dados[h][3])))
                 self.tableWidget1.setItem(h,3, QTableWidgetItem(str(dados[h][2])))
                 self.tableWidget1.setItem(h,2, QTableWidgetItem(str(tuple(dados[h][1]))))
                 self.tableWidget1.setItem(h,1, QTableWidgetItem(str(dados[h][0])))

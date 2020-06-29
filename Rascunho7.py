@@ -5,49 +5,41 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-img = cv2.imread('img4.jpg',0).astype('int')
+img = cv2.imread('Img4.jpg', 0)
 
-im1 = img
+img=img.astype('int')
+im_res=np.zeros(img.shape)
 
-im_res = np.zeros(np.shape(im1))
+a = len(img)
+b = len(img[0])
 
-a = len(im1)
-b = len(im1[0])
+a1=int(-a/2)
+b1=int(-b/2)
 
-
-a1 = int(-px)
-b1 = int(-py)
-
-
-x=0
-y=0
-
-graus=-angulo
+graus=25
 theta=(3.14/180)*graus #rad
 
-x=np.arange(0,a)
-y=np.arange(0,b)
+x=np.tile(np.arange(0,a),b)
+y=np.repeat(np.arange(0,b),a)
 
-coor=[x,y]
+x1=np.floor((x+a1)*np.cos(theta)-(y+b1)*np.sin(theta)-a1).astype('int')
+y1=np.floor((x+a1)*np.sin(theta)+(y+b1)*np.cos(theta)-b1).astype('int')
+
+coor1 = np.array([x,y])
+coor = np.array([x1,y1])
+
+for i in range(len(x1)):
+    if (coor[0,i] >= 0) and (coor[0,i] < a) and (coor[1,i] >= 0) and (coor[1,i] < b):
+        im_res[coor1[0,i],coor1[1,i]]=img[coor[0,i],coor[1,i]]
+
+print('foi')
 
 
-
-'''for j in range(b):
-    for i in range(a):
-        x= (i+a1)*np.cos(theta)-(j+b1)*np.sin(theta)-a1
-        y= (i+a1)*np.sin(theta)+(j+b1)*np.cos(theta)-b1
-        if -a<x<a and -b<y<b:
-            im_res[i,j]= im1[int(np.floor(x)),int(np.floor(y))]
-        if x<=0 or y<=0:
-            im_res[i,j] = 0'''
-
-
-im_final=im_final.astype('uint8')
+im_final=im_res.astype('uint8')
 cv2.imshow('Original1',im_final)
 
-im_res=im_res.astype('uint8')
-cv2.imshow('Original2',im_res)
-
+img=img.astype('uint8')
+cv2.imshow('Original2',img)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
