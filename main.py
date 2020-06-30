@@ -1462,16 +1462,18 @@ class MyApp(QMainWindow):
                             if regioes[i,j] == x:
                                 centro_massa[0]=centro_massa[0] + j/area 
                                 centro_massa[1]=centro_massa[1] + i/area
-                                a= a + i**2
-                                b= b + i*j
-                                c= c + j**2
                                 #dá pra calcular tudo num mesmo loop
+                    for i2 in range(a1):
+                        for j2 in range(a2):
+                            if regioes[i2,j2] == x:
+                                a= a + (i2-centro_massa[1])**2
+                                b= b + (i2-centro_massa[1])*(j2-centro_massa[0])
+                                c= c + (j2-centro_massa[0])**2
+                    b=2*b
                     
-                    
-                    teta1=(np.arcsin(b/(np.sqrt(b**2+(a-c)**2)))/2)*180/np.pi
+                    teta1=0.5*np.arctan(b/(a-c))*180/np.pi
                     teta1=np.around(teta1,decimals=2)
-                    teta2=(np.arcsin(-b/(np.sqrt(b**2+(a-c)**2)))/2)*180/np.pi
-                    teta2=np.around(teta2,decimals=2)
+                 
                     teta=teta1*np.pi/180
                     centro_massa[0]=int(centro_massa[0])
                     centro_massa[1]=int(centro_massa[1])
@@ -1493,7 +1495,7 @@ class MyApp(QMainWindow):
                     t_x=np.count_nonzero(x_p == 1)
                     t_y=np.count_nonzero(y_p == 1)
                     
-                    dados[x]=[area,centro_massa,teta1,(t_x,t_y)]
+                    dados[x]=[area,centro_massa,teta1,[t_x,t_y]]
 
             #Imagem para exibição        
             a=tipo.shape[0]
@@ -1504,19 +1506,29 @@ class MyApp(QMainWindow):
             img_res[:,:,1]=img
             img_res[:,:,2]=img
             for k in dados:
-                #colocar numeração nos pontos
-                img_res=cv2.circle(	img_res, tuple(dados[k][1]), 3, (0, 255, 0),-1)
-                #desenhar linha quando tiver dimensões
+                coor=dados[k][1]
+                angulo=int(dados[k][2])
+                a3=max(dados[k][3])
+                b3=min(dados[k][3])
+                p1_x=int(a3*0.5*np.cos(angulo) +coor[0])
+                p1_y=int(a3*0.5*np.sin(angulo) +coor[1])
+
+                p2_y=int(-a3*0.5*np.sin(angulo) +coor[1])
+                p2_x=int(-a3*0.5*np.cos(angulo) +coor[0])
+
+                img_res=cv2.line(img_res, (p1_x,p1_y), (p2_x,p2_y), (255, 0, 0), 1)
+                img_res=cv2.circle(	img_res, tuple(dados[k][1]), 2, (0, 255, 0),-1)
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                img_res=cv2.putText(img_res,str(k),tuple(dados[k][1]),font, fontScale=0.3, color= (0,255,0))                #desenhar linha quando tiver dimensões
             self.im_res=img_res.astype('uint8')
             self.atualizarIm('im_res')
-
             #Criação da tabela de dados
             self.tableWidget1 = QTableWidget()
             self.tableWidget1.setColumnCount(5)
             self.tableWidget1.setRowCount(a)
             self.tableWidget1.setHorizontalHeaderLabels(['Regiões','Área','Centro de massa','Orientação','Dimensão'])
             for h in dados:
-                self.tableWidget1.setItem(h,4, QTableWidgetItem(str(dados[h][3])))
+                self.tableWidget1.setItem(h,4, QTableWidgetItem(str(tuple(dados[h][3]))))
                 self.tableWidget1.setItem(h,3, QTableWidgetItem(str(dados[h][2])))
                 self.tableWidget1.setItem(h,2, QTableWidgetItem(str(tuple(dados[h][1]))))
                 self.tableWidget1.setItem(h,1, QTableWidgetItem(str(dados[h][0])))
@@ -1526,7 +1538,6 @@ class MyApp(QMainWindow):
             self.tableWidget1.setWindowIcon(QIcon('Icone.png'))
             self.tableWidget1.show()
             
-            #dimensão
 
             
         

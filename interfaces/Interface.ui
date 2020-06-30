@@ -610,7 +610,7 @@
   </action>
   <action name="actionSegmenta_o">
    <property name="text">
-    <string>Segmentação</string>
+    <string>Segmentação por Vizinhança</string>
    </property>
   </action>
   <action name="actionR">
