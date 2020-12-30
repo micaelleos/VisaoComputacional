@@ -317,7 +317,6 @@
     <addaction name="menuDerivativo"/>
     <addaction name="actionSobel"/>
     <addaction name="actionKirsch"/>
-    <addaction name="actionCanny"/>
     <addaction name="menuLaplaciano"/>
    </widget>
    <widget class="QMenu" name="menuFiltos">

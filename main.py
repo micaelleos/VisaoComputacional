@@ -33,6 +33,8 @@ class MyApp(QMainWindow):
         self.hist=np.zeros([255]) # histograma
         self.verticalSlider.valueChanged.connect(self.atualizar_lim)
         self.Button_abrirIm1.clicked.connect(self.abrir_imagem_1)
+        self.Button_abrirIm1_2.clicked.connect(lambda: self.salvar('im1'))
+        self.Button_abrirIm1_3.clicked.connect(lambda: self.salvar('im2'))
         self.Button_abrirIm2.clicked.connect(self.abrir_imagem_2)
         self.Button_Usar_Resultado.clicked.connect(self.usar_res)
         self.Button_switch.clicked.connect(self.switch)
@@ -43,7 +45,7 @@ class MyApp(QMainWindow):
         #Funções do menu
         self.actionAbrir_Imagem_1.triggered.connect(self.abrir_imagem_1)
         self.actionAbrir_Imagem_2.triggered.connect(self.abrir_imagem_2)
-        self.actionSalvar_Resultado.triggered.connect(self.salvar)
+        self.actionSalvar_Resultado.triggered.connect(lambda: self.salvar('im_res'))
         self.actionSair.triggered.connect(self.fechar)
         #Converter
         self.actionTons_de_Cinza.triggered.connect(self.tons_de_cinza)
@@ -73,7 +75,7 @@ class MyApp(QMainWindow):
         self.action5x5.triggered.connect(self.Laplaciano5x5)
         self.action9x9.triggered.connect(self.Laplaciano9x9)
         self.actionKirsch.triggered.connect(self.Kirsch)
-        self.actionCanny.triggered.connect(self.Canny)
+        #self.actionCanny.triggered.connect(self.Canny)
         #filtros
         self.actionGaussiano.triggered.connect(self.abrirDialog4)
         self.actionM_dia.triggered.connect(self.media)
@@ -147,9 +149,15 @@ class MyApp(QMainWindow):
     def fechar(self): # fecha programa
         sys.exit()
 
-    def salvar(self): # salva a imagem im1.
+    def salvar(self, im): # salva a imagens
+        if im == 'im_res':
+            img=self.im_res
+        if im == 'im1':
+            img=self.im1
+        if im == 'im2':
+            img=self.im2
         filename = QFileDialog.getSaveFileName(self)
-        cv2.imwrite(filename[0],self.im_res)
+        cv2.imwrite(filename[0],img)
 
     def atualizarIm(self,tipo):
         #tipo 1: imagem original, senão é a processada
@@ -573,17 +581,13 @@ class MyApp(QMainWindow):
         if self.im1 is None:
             self.abrir_imagem_1()
 
-        im1 = self.im1 
+        img = self.im1 
 
-        im_res = np.zeros(np.shape(im1))
+        im_res = np.zeros(np.shape(img))
         
-        a = len(im1)
-        b = len(im1[0])
+        a = len(img)
+        b = len(img[0])
 
-        #px=a #coordenada de rotação para o eixo x
-        #py=b #coordenada de rotação para o eixo y
-        
-        
         if tipo == "centro":
             px=a/2
             py=b/2
@@ -591,20 +595,21 @@ class MyApp(QMainWindow):
         a1 = int(-px)
         b1 = int(-py)
 
-
-        x=0
-        y=0
-        graus=-angulo
+        graus=angulo
         theta=(3.14/180)*graus #rad
 
-        for j in range(b):
-           for i in range(a):
-                x= (i+a1)*np.cos(theta)-(j+b1)*np.sin(theta)-a1
-                y= (i+a1)*np.sin(theta)+(j+b1)*np.cos(theta)-b1
-                if -a<x<a and -b<y<b:
-                    im_res[i,j]= im1[int(np.floor(x)),int(np.floor(y))]
-                if x<=0 or y<=0:
-                    im_res[i,j] = 0
+        x=np.tile(np.arange(0,a),b)
+        y=np.repeat(np.arange(0,b),a)
+
+        x1=np.floor((x+a1)*np.cos(theta)-(y+b1)*np.sin(theta)-a1).astype('int')
+        y1=np.floor((x+a1)*np.sin(theta)+(y+b1)*np.cos(theta)-b1).astype('int')
+
+        coor1 = np.array([x,y])
+        coor = np.array([x1,y1])
+
+        for i in range(len(x1)):
+            if (coor[0,i] >= 0) and (coor[0,i] < a) and (coor[1,i] >= 0) and (coor[1,i] < b):
+                im_res[coor1[0,i],coor1[1,i]]=img[coor[0,i],coor[1,i]]
         
         self.im_res = im_res.astype('uint8')
         self.atualizarIm('im_res')
@@ -1091,7 +1096,10 @@ class MyApp(QMainWindow):
 
         im_res=self.convolucao(mascara,'im1')
 
-        
+        #a=im_res.max()
+        #b=im_res.min()
+        #im_res = (im_res - b)*(255/(a-b))
+        im_res[im_res<0]=0
         res_max=im_res.max()
         im_res=im_res*(255/res_max)
 
@@ -1109,7 +1117,7 @@ class MyApp(QMainWindow):
         self.atualizarIm('im_res')      
 
     def fLaplaciano3x3(self):
-        mascara=np.array([[0,-1,0],
+        mascara=(1/5)*np.array([[0,-1,0],
                     [-1,4,-1],
                     [0,-1,0]])
 
@@ -1133,7 +1141,7 @@ class MyApp(QMainWindow):
         self.atualizarIm('im_res')
 
     def fLaplaciano5x5(self):
-        mascara=np.array([[-1,-1,-1,-1,-1],
+        mascara=(1/25)*np.array([[-1,-1,-1,-1,-1],
                           [-1,-1,-1,-1,-1],
                           [-1,-1,24,-1,-1],
                           [-1,-1,-1,-1,-1],
@@ -1159,7 +1167,7 @@ class MyApp(QMainWindow):
         self.atualizarIm('im_res')
 
     def fLaplaciano9x9(self):
-        mascara=np.array([[-1,-1,-1,-1,-1,-1,-1,-1,-1],
+        mascara=(1/9)*np.array([[-1,-1,-1,-1,-1,-1,-1,-1,-1],
                           [-1,-1,-1,-1,-1,-1,-1,-1,-1],
                           [-1,-1,-1,-1,-1,-1,-1,-1,-1],
                           [-1,-1,-1,8,8,8,-1,-1,-1],
@@ -1472,8 +1480,9 @@ class MyApp(QMainWindow):
                     b=2*b
                     
                     teta1=0.5*np.arctan(b/(a-c))*180/np.pi
+                    teta2=0.5*np.arcsin(b/(np.sqrt(b**2+(a+c)**2)))
                     teta1=np.around(teta1,decimals=2)
-                 
+                    
                     teta=teta1*np.pi/180
                     centro_massa[0]=int(centro_massa[0])
                     centro_massa[1]=int(centro_massa[1])
@@ -1508,6 +1517,7 @@ class MyApp(QMainWindow):
             for k in dados:
                 coor=dados[k][1]
                 angulo=int(dados[k][2])
+    
                 a3=max(dados[k][3])
                 b3=min(dados[k][3])
                 p1_x=int(a3*0.5*np.cos(angulo) +coor[0])
