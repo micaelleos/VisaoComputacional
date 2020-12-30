@@ -21,13 +21,13 @@ A interface gráfica possibilita investigações inicias de problemas de visão 
 
 Para executar o programa:
 
-    ######1- Instalar as bibliotecas:   
-    ######- OpenCV
-    ######- Numpy
-    ######- Matplotlib
-    ######- Scipy
-    ######- PyQt5
-    ######2- Clonar repositório no diretório de interesse.
-    ######3-Executar o script main.py
+   1. Instalar as bibliotecas:   
+    *OpenCV
+    * Numpy
+    * Matplotlib
+    * Scipy
+    * PyQt5
+   2. Clonar repositório no diretório de interesse.
+   3. Executar o script main.py
 
 Programa desenvolvido na matéria de Visão Computacional PROEE-DEL/UFS
