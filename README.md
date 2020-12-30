@@ -23,11 +23,11 @@ Para executar o programa:
 
    1. Instalar as bibliotecas:
    
-    -OpenCV
-    -Numpy
-    -Matplotlib
-    -Scipy
-    -PyQt5
+    - OpenCV
+    - Numpy
+    - Matplotlib
+    - Scipy
+    - PyQt5
     
    2. Clonar repositório no diretório de interesse.
    
